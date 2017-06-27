@@ -1,0 +1,8 @@
+    # Laravel app!
+    - name: configure laravel php-fpm pool
+      template: src=files/laravel.php-fpm dest=/etc/php5/fpm/pool.d/laravel.conf
+      notify: restart php-fpm
+
+    - name: configure laravel nginx host
+      template: src=files/laravel.nginx dest=/etc/nginx/sites-available/laravel
+
