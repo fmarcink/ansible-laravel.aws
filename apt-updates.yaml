@@ -1,0 +1,32 @@
+---
+
+# Cleans and updates packages and distro
+
+- hosts: all
+  become: yes
+  become_method: sudo
+  gather_facts: false
+
+
+# Only update the cache if it hasn't been modified in the last 3600 seconds (avoids needless overhead)
+
+  pre_tasks:
+    - name: check apt last update
+      stat: path=/var/cache/apt
+      register: apt_cache_stat
+
+    - name: update apt if needed
+      apt: update_cache=yes cache_valid_time=3600
+     
+  tasks:
+  
+    - name: apt-get clean
+      shell: apt-get clean
+      become: true
+      become_user: root
+
+    - name: Install distro update
+      become: true
+      apt:
+        upgrade: dist
+
